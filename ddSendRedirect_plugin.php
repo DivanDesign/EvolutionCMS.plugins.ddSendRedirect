@@ -31,7 +31,7 @@ if ($e->name == 'OnPageNotFound'){
 			);
 		}
 		
-		$this->sendRedirect(
+		$modx->sendRedirect(
 			$rules[$oldUrl],
 			0,
 			'REDIRECT_HEADER',
