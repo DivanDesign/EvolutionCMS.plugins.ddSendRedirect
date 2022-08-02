@@ -3,9 +3,7 @@
  * ddSendRedirect
  * @version 1.0 (2012-02-16)
  * 
- * @desc Переадресовывает несуществующие страницы на необходимые адреса (url или id документа).
- * 
- * @events OnPageNotFound
+ * @see README.md
  * 
  * @copyright 2012 DD Group {@link https://DivanDesign.biz }
  */
