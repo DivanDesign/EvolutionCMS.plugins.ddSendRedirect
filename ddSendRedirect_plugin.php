@@ -14,9 +14,7 @@ $rules = array(
 	
 );
 
-$e = &$modx->Event;
-
-if ($e->name == 'OnPageNotFound'){
+if ($modx->Event->name == 'OnPageNotFound'){
 	$oldUrl = $_SERVER['REQUEST_URI'];
 	
 	//Если для текущего url есть правило  
