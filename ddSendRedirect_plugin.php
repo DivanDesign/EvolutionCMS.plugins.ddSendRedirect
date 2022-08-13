@@ -8,7 +8,7 @@
  * @copyright 2012 DD Group {@link https://DivanDesign.biz }
  */
 
-$rules = array(
+$redirectionRules = array(
 	
 );
 
@@ -16,11 +16,11 @@ if ($modx->Event->name == 'OnPageNotFound'){
 	$oldUrl = $_SERVER['REQUEST_URI'];
 	
 	//Если для текущего url есть правило  
-	if (isset($rules[$oldUrl])){
+	if (isset($redirectionRules[$oldUrl])){
 		//Если редиректить надо на ID, сформируем url
-		if (is_numeric($rules[$oldUrl])){
-			$rules[$oldUrl] = $modx->makeUrl(
-				$rules[$oldUrl],
+		if (is_numeric($redirectionRules[$oldUrl])){
+			$redirectionRules[$oldUrl] = $modx->makeUrl(
+				$redirectionRules[$oldUrl],
 				'',
 				'',
 				'full'
@@ -28,7 +28,7 @@ if ($modx->Event->name == 'OnPageNotFound'){
 		}
 		
 		$modx->sendRedirect(
-			$rules[$oldUrl],
+			$redirectionRules[$oldUrl],
 			0,
 			'REDIRECT_HEADER',
 			'HTTP/1.1 301 Moved Permanently'
