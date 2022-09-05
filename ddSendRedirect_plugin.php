@@ -8,6 +8,13 @@
  * @copyright 2012 DD Group {@link https://DivanDesign.biz }
  */
 
+//Include (MODX)EvolutionCMS.libraries.ddTools
+require_once(
+	//path to `assets`
+	MODX_BASE_PATH .
+	'assets/libs/ddTools/modx.ddtools.class.php'
+);
+
 $redirectionRules = array(
 	
 );
@@ -25,6 +32,11 @@ if ($modx->Event->name == 'OnPageNotFound'){
 				'',
 				'full'
 			);
+		}else{
+			//Support for any kind of relative URLs
+			$redirectionRules[$oldUrl] = \ddTools::convertUrlToAbsolute([
+				'url' => $redirectionRules[$oldUrl]
+			]);
 		}
 		
 		$modx->sendRedirect(

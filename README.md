@@ -1,15 +1,20 @@
 # (MODX)EvolutionCMS.plugins.ddSendRedirect
 
 Redirects from required non-existent URLs to required target URLs.
+You can redirect to any existing site page or to any external URL at all.
+
 Each target URL can be set as:
-1. URL string or just ID of any existing site page.
-2. Any external URL at all.
+1. Full: `https://example.com/some/page`.
+2. Without protocol: `example.com/some/page`, `//example.com/some/page`.
+3. Without domain: `some/page`, `/some/page`.
+4. Just an ID of the existing document: `12`.
 
 
 ## Requires
 
 * PHP >= 5.6
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.biz/modx/ddtools) >= 0.55
 
 
 ## Installation
