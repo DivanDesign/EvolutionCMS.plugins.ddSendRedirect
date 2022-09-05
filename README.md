@@ -3,11 +3,11 @@
 Redirects from required non-existent URLs to required target URLs.
 You can redirect to any existing site page or to any external URL at all.
 
-Each target URL can be set as:
+Each URL can be specified in one of the following format:
 1. Full: `https://example.com/some/page`.
 2. Without protocol: `example.com/some/page`, `//example.com/some/page`.
 3. Without domain: `some/page`, `/some/page`.
-4. Just an ID of the existing document: `12`.
+4. Just an ID of the existing document: `12` (only for target URLs).
 
 
 ## Requires

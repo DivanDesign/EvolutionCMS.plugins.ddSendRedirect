@@ -20,33 +20,46 @@ $redirectionRules = array(
 );
 
 if ($modx->Event->name == 'OnPageNotFound'){
-	$oldUrl = $_SERVER['REQUEST_URI'];
+	$currentUrl = \ddTools::convertUrlToAbsolute([
+		'url' => $_SERVER['REQUEST_URI']
+	]);
 	
-	//Если для текущего url есть правило  
-	if (isset($redirectionRules[$oldUrl])){
-		//Если редиректить надо на ID, сформируем url
-		if (is_numeric($redirectionRules[$oldUrl])){
-			$redirectionRules[$oldUrl] = $modx->makeUrl(
-				$redirectionRules[$oldUrl],
-				'',
-				'',
-				'full'
+	foreach (
+		$redirectionRules as
+		$oldUrl =>
+		$newUrl
+	){
+		//Support for any kind of relative URLs
+		$oldUrl = \ddTools::convertUrlToAbsolute([
+			'url' => $oldUrl
+		]);
+		
+		//Если для текущего url есть правило  
+		if ($oldUrl == $currentUrl){
+			//Если редиректить надо на ID, сформируем url
+			if (is_numeric($newUrl)){
+				$newUrl = $modx->makeUrl(
+					$newUrl,
+					'',
+					'',
+					'full'
+				);
+			}else{
+				//Support for any kind of relative URLs
+				$newUrl = \ddTools::convertUrlToAbsolute([
+					'url' => $newUrl
+				]);
+			}
+			
+			$modx->sendRedirect(
+				$newUrl,
+				0,
+				'REDIRECT_HEADER',
+				'HTTP/1.1 301 Moved Permanently'
 			);
-		}else{
-			//Support for any kind of relative URLs
-			$redirectionRules[$oldUrl] = \ddTools::convertUrlToAbsolute([
-				'url' => $redirectionRules[$oldUrl]
-			]);
+			
+			exit;
 		}
-		
-		$modx->sendRedirect(
-			$redirectionRules[$oldUrl],
-			0,
-			'REDIRECT_HEADER',
-			'HTTP/1.1 301 Moved Permanently'
-		);
-		
-		exit;
 	}
 }
 //?>
