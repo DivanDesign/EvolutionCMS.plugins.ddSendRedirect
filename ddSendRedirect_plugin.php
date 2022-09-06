@@ -1,34 +1,98 @@
 //<?php
 /** 
- * ddRedirectMoved plugin
- * @version 1.0 (2012-02-16)
+ * ddSendRedirect
+ * @version 2.0 (2022-09-06)
  * 
- * Переадресовывает несуществующие страницы на необходимые адреса (url или id документа).
+ * @see README.md
  * 
- * @events OnPageNotFound
- * 
- * @copyright 2012, DivanDesign
- * http://www.DivanDesign.ru
+ * @copyright 2012–2022 DD Group {@link https://DivanDesign.biz }
  */
 
-$rules = array(
+if ($modx->Event->name == 'OnPageNotFound'){
+	//Include (MODX)EvolutionCMS.libraries.ddTools
+	require_once(
+		//path to `assets`
+		MODX_BASE_PATH .
+		'assets/libs/ddTools/modx.ddtools.class.php'
+	);
 	
-);
-
-$e = &$modx->Event;
-
-if ($e->name == 'OnPageNotFound'){
-	$oldUrl = $_SERVER['REQUEST_URI'];
-
-	//Если для текущего url есть правило  
-	if (isset($rules[$oldUrl])){
-		//Если редиректить надо на id, сформируем url
-		if (is_numeric($rules[$oldUrl])){
-			$rules[$oldUrl] = $modx->makeUrl($rules[$oldUrl], '', '', 'full');
+	//Prepare params
+	$params = \DDTools\ObjectTools::convertType([
+		'object' => $params,
+		'type' => 'objectStdClass'
+	]);	
+	
+	//Validate params
+	if (
+		!empty($params->docId) &&
+		is_numeric($params->docId) &&
+		!empty($params->tvName)
+	){
+		//Try to get rules
+		$redirectionRules = \ddTools::getTemplateVarOutput(
+			[$params->tvName],
+			$params->docId
+		);
+		
+		if (!empty($redirectionRules)){
+			$redirectionRules = $redirectionRules[$params->tvName];
+			
+			$redirectionRules = \DDTools\ObjectTools::convertType([
+				'object' => $redirectionRules,
+				'type' => 'objectArray'
+			]);
 		}
 		
-		$this->sendRedirect($rules[$oldUrl], 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');
-		exit;
+		//If redirection rules are set
+		if (!empty($redirectionRules)){
+			$currentUrl = \ddTools::convertUrlToAbsolute([
+				'url' => $_SERVER['REQUEST_URI']
+			]);
+			
+			foreach (
+				$redirectionRules as
+				$rule
+			){
+				$rule = array_values($rule);
+				
+				$rule = (object) [
+					'from' => $rule[0],
+					'to' => $rule[1]
+				];
+				
+				//Support for any kind of relative URLs
+				$rule->from = \ddTools::convertUrlToAbsolute([
+					'url' => $rule->from
+				]);
+				
+				//Если для текущего url есть правило  
+				if ($rule->from == $currentUrl){
+					//Если редиректить надо на ID, сформируем url
+					if (is_numeric($rule->to)){
+						$rule->to = \ddTools::$modx->makeUrl(
+							$rule->to,
+							'',
+							'',
+							'full'
+						);
+					}else{
+						//Support for any kind of relative URLs
+						$rule->to = \ddTools::convertUrlToAbsolute([
+							'url' => $rule->to
+						]);
+					}
+					
+					\ddTools::$modx->sendRedirect(
+						$rule->to,
+						0,
+						'REDIRECT_HEADER',
+						'HTTP/1.1 301 Moved Permanently'
+					);
+					
+					exit;
+				}
+			}
+		}
 	}
 }
 //?>
