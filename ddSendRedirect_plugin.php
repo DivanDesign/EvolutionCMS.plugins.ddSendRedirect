@@ -1,11 +1,11 @@
 //<?php
 /** 
  * ddSendRedirect
- * @version 1.0 (2012-02-16)
+ * @version 2.0 (2022-09-06)
  * 
  * @see README.md
  * 
- * @copyright 2012 DD Group {@link https://DivanDesign.biz }
+ * @copyright 2012–2022 DD Group {@link https://DivanDesign.biz }
  */
 
 if ($modx->Event->name == 'OnPageNotFound'){

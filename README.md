@@ -23,7 +23,7 @@ Each URL can be specified in one of the following format:
 Elements → Plugins: Create a new plugin with the following data
 
 1. Plugin name: `ddSendRedirect`.
-2. Description: `<b>1.0</b> Redirects from required non-existent URLs to required target URLs.`.
+2. Description: `<b>2.0</b> Redirects from required non-existent URLs to required target URLs.`.
 3. Category: `Core`.
 4. Parse DocBlock: `no`.
 5. Plugin code (php): Insert content of the `ddSendRedirect_plugin.php` file from the archive.
