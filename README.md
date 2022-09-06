@@ -27,8 +27,81 @@ Elements → Plugins: Create a new plugin with the following data
 3. Category: `Core`.
 4. Parse DocBlock: `no`.
 5. Plugin code (php): Insert content of the `ddSendRedirect_plugin.php` file from the archive.
-6. System events:
+6. Properties: Insert content of the `ddSendRedirect_configuration.json` file from the archive.
+7. System events:
 	1. `OnPageNotFound`.
+
+
+## Usage
+
+
+### 1. Create TV and document with redirection rules
+
+Redirection rules will be stored in TV value of specified document. The plugin gets the rules from the TV.
+
+1. Create the TV:
+	* Name: `settings_redirectionRules` (you can specify another name, this is an example).
+	* Input Type: `Textarea`.
+2. Assign the TV to a required template.
+3. Create a document with specified template. Let the document ID be `42`.
+
+
+### 2. Configure (MODX)EvolutionCMS.plugins.ddSendRedirect
+
+Go to the plugin configuration tab and save the data:
+1. Document ID containing redirection rules: `42`.
+2. TV name containing redirection rules: `settings_redirectionRules`.
+
+
+### 3. Set up (MODX)EvolutionCMS.plugins.ManagerManager.mm_ddMultipleFields (optional)
+
+You can use this interface for more convenience.
+
+```php
+mm_ddMultipleFields([
+	'fields' => 'settings_redirectionRules',
+	'columns' => [
+		[
+			'title' => 'Source URL *',
+			'type' => 'textarea',
+			'width' => 250
+		],
+		[
+			'title' => 'Target URL *',
+			'type' => 'textarea',
+			'width' => 250
+		]
+	]
+]);
+```
+
+If you don't want to use mm_ddMultipleFields, you can just fill JSON manually in the following format:
+
+```json
+[
+	[
+		"https://example.com/some/source/url",
+		"https://example.com/some/target/url"
+	],
+	[
+		"another/source/url",
+		"another/target/url"
+	]
+]
+```
+
+
+## Parameters description
+
+* `$docId`
+	* Desctription: Document ID containing redirection rules.
+	* Valid values: `integer`
+	* **Required**
+	
+* `$tvName`
+	* Desctription: TV name containing redirection rules in JSON (see Usage above).
+	* Valid values: `string`
+	* **Required**
 
 
 ## Links

@@ -1,0 +1,20 @@
+{
+	"docId": [
+		{
+			"label": "Document ID containing redirection rules",
+			"desc": "",
+			"type": "int",
+			"value": "",
+			"default": ""
+		}
+	],
+	"tvName": [
+		{
+			"label": "TV name containing redirection rules",
+			"desc": "Rules must be writen in JSON. See README for more details.",
+			"type": "text",
+			"value": "",
+			"default": ""
+		}
+	]
+}

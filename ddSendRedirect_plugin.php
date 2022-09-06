@@ -15,50 +15,83 @@ require_once(
 	'assets/libs/ddTools/modx.ddtools.class.php'
 );
 
-$redirectionRules = array(
-	
-);
-
 if ($modx->Event->name == 'OnPageNotFound'){
-	$currentUrl = \ddTools::convertUrlToAbsolute([
-		'url' => $_SERVER['REQUEST_URI']
-	]);
+	//Prepare params
+	$params = \DDTools\ObjectTools::convertType([
+		'object' => $params,
+		'type' => 'objectStdClass'
+	]);	
 	
-	foreach (
-		$redirectionRules as
-		$oldUrl =>
-		$newUrl
+	//Validate params
+	if (
+		!empty($params->docId) &&
+		is_numeric($params->docId) &&
+		!empty($params->tvName)
 	){
-		//Support for any kind of relative URLs
-		$oldUrl = \ddTools::convertUrlToAbsolute([
-			'url' => $oldUrl
-		]);
+		//Try to get rules
+		$redirectionRules = \ddTools::getTemplateVarOutput(
+			[$params->tvName],
+			$params->docId
+		);
 		
-		//Если для текущего url есть правило  
-		if ($oldUrl == $currentUrl){
-			//Если редиректить надо на ID, сформируем url
-			if (is_numeric($newUrl)){
-				$newUrl = $modx->makeUrl(
-					$newUrl,
-					'',
-					'',
-					'full'
-				);
-			}else{
+		if (!empty($redirectionRules)){
+			$redirectionRules = $redirectionRules[$params->tvName];
+			
+			$redirectionRules = \DDTools\ObjectTools::convertType([
+				'object' => $redirectionRules,
+				'type' => 'objectArray'
+			]);
+		}
+		
+		//If redirection rules are set
+		if (!empty($redirectionRules)){
+			$currentUrl = \ddTools::convertUrlToAbsolute([
+				'url' => $_SERVER['REQUEST_URI']
+			]);
+			
+			foreach (
+				$redirectionRules as
+				$rule
+			){
+				$rule = array_values($rule);
+				
+				$rule = (object) [
+					'from' => $rule[0],
+					'to' => $rule[1]
+				];
+				
 				//Support for any kind of relative URLs
-				$newUrl = \ddTools::convertUrlToAbsolute([
-					'url' => $newUrl
+				$rule->from = \ddTools::convertUrlToAbsolute([
+					'url' => $rule->from
 				]);
+				
+				//Если для текущего url есть правило  
+				if ($rule->from == $currentUrl){
+					//Если редиректить надо на ID, сформируем url
+					if (is_numeric($rule->to)){
+						$rule->to = $modx->makeUrl(
+							$rule->to,
+							'',
+							'',
+							'full'
+						);
+					}else{
+						//Support for any kind of relative URLs
+						$rule->to = \ddTools::convertUrlToAbsolute([
+							'url' => $rule->to
+						]);
+					}
+					
+					$modx->sendRedirect(
+						$rule->to,
+						0,
+						'REDIRECT_HEADER',
+						'HTTP/1.1 301 Moved Permanently'
+					);
+					
+					exit;
+				}
 			}
-			
-			$modx->sendRedirect(
-				$newUrl,
-				0,
-				'REDIRECT_HEADER',
-				'HTTP/1.1 301 Moved Permanently'
-			);
-			
-			exit;
 		}
 	}
 }
