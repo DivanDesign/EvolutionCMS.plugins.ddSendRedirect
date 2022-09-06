@@ -8,14 +8,14 @@
  * @copyright 2012 DD Group {@link https://DivanDesign.biz }
  */
 
-//Include (MODX)EvolutionCMS.libraries.ddTools
-require_once(
-	//path to `assets`
-	MODX_BASE_PATH .
-	'assets/libs/ddTools/modx.ddtools.class.php'
-);
-
 if ($modx->Event->name == 'OnPageNotFound'){
+	//Include (MODX)EvolutionCMS.libraries.ddTools
+	require_once(
+		//path to `assets`
+		MODX_BASE_PATH .
+		'assets/libs/ddTools/modx.ddtools.class.php'
+	);
+	
 	//Prepare params
 	$params = \DDTools\ObjectTools::convertType([
 		'object' => $params,
