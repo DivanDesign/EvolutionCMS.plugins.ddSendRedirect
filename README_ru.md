@@ -107,6 +107,8 @@ mm_ddMultipleFields([
 ## Ссылки
 
 * [Telegram chat](https://t.me/dd_code)
+* [Packagist](https://packagist.org/packages/dd/evolutioncms-plugins-ddsendredirect)
+* [GitHub](https://github.com/DivanDesign/EvolutionCMS.plugins.ddSendRedirect)
 
 
 <link rel="stylesheet" type="text/css" href="https://DivanDesign.ru/assets/files/ddMarkdown.css" />
