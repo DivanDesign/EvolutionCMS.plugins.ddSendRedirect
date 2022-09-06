@@ -69,7 +69,7 @@ if ($modx->Event->name == 'OnPageNotFound'){
 				if ($rule->from == $currentUrl){
 					//Если редиректить надо на ID, сформируем url
 					if (is_numeric($rule->to)){
-						$rule->to = $modx->makeUrl(
+						$rule->to = \ddTools::$modx->makeUrl(
 							$rule->to,
 							'',
 							'',
@@ -82,7 +82,7 @@ if ($modx->Event->name == 'OnPageNotFound'){
 						]);
 					}
 					
-					$modx->sendRedirect(
+					\ddTools::$modx->sendRedirect(
 						$rule->to,
 						0,
 						'REDIRECT_HEADER',
