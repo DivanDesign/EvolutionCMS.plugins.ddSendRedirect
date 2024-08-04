@@ -9,26 +9,26 @@
  */
 
 if ($modx->Event->name == 'OnPageNotFound'){
-	//Include (MODX)EvolutionCMS.libraries.ddTools
+	// Include (MODX)EvolutionCMS.libraries.ddTools
 	require_once(
-		//path to `assets`
-		MODX_BASE_PATH .
-		'assets/libs/ddTools/modx.ddtools.class.php'
+		// Path to `assets`
+		MODX_BASE_PATH
+		. 'assets/libs/ddTools/modx.ddtools.class.php'
 	);
 	
-	//Prepare params
+	// Prepare params
 	$params = \DDTools\ObjectTools::convertType([
 		'object' => $params,
 		'type' => 'objectStdClass'
 	]);	
 	
-	//Validate params
+	// Validate params
 	if (
 		!empty($params->docId) &&
 		is_numeric($params->docId) &&
 		!empty($params->tvName)
 	){
-		//Try to get rules
+		// Try to get rules
 		$redirectionRules = \ddTools::getTemplateVarOutput(
 			[$params->tvName],
 			$params->docId
@@ -43,7 +43,7 @@ if ($modx->Event->name == 'OnPageNotFound'){
 			]);
 		}
 		
-		//If redirection rules are set
+		// If redirection rules are set
 		if (!empty($redirectionRules)){
 			$currentUrl = \ddTools::convertUrlToAbsolute([
 				'url' => $_SERVER['REQUEST_URI']
@@ -60,14 +60,14 @@ if ($modx->Event->name == 'OnPageNotFound'){
 					'to' => $rule[1]
 				];
 				
-				//Support for any kind of relative URLs
+				// Support for any kind of relative URLs
 				$rule->from = \ddTools::convertUrlToAbsolute([
 					'url' => $rule->from
 				]);
 				
-				//Если для текущего url есть правило  
+				// Если для текущего url есть правило  
 				if ($rule->from == $currentUrl){
-					//Если редиректить надо на ID, сформируем url
+					// Если редиректить надо на ID, сформируем url
 					if (is_numeric($rule->to)){
 						$rule->to = \ddTools::$modx->makeUrl(
 							$rule->to,
@@ -76,7 +76,7 @@ if ($modx->Event->name == 'OnPageNotFound'){
 							'full'
 						);
 					}else{
-						//Support for any kind of relative URLs
+						// Support for any kind of relative URLs
 						$rule->to = \ddTools::convertUrlToAbsolute([
 							'url' => $rule->to
 						]);
